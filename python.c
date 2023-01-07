@@ -35,6 +35,10 @@ void rtc_reset(void);
 char *rtc_read_time_str(void);
 char *rtc_read_date_str(void);
 
+
+
+
+
 //посылаем команду или байт данных в часы
 void rtc_write(unsigned char cmd) {
 	digitalWrite(PinRst,HIGH);
@@ -151,12 +155,12 @@ unsigned char from_bcd(unsigned char decimal) {
 
 static PyObject *
 py_ds1302_get_time_str(PyObject *self, PyObject *args) {
-	return PyString_FromString(rtc_read_time_str());
+	return PyUnicode_FromString(rtc_read_time_str());
 }
 
 static PyObject *
 py_ds1302_get_date_str(PyObject *self, PyObject *args) {
-	return PyString_FromString(rtc_read_date_str());
+	return PyUnicode_FromString(rtc_read_date_str());
 }
 
 static PyObject *
@@ -233,9 +237,29 @@ static PyMethodDef ds1302Methods[] = {
 	{NULL, NULL, 0, NULL}
 };
 
-PyMODINIT_FUNC
-initds1302(void) {
-	PyObject *module = Py_InitModule("ds1302", ds1302Methods);
+static struct PyModuleDef cModPyDem =
+{
+    PyModuleDef_HEAD_INIT,
+    "ds1302", /* name of module */
+    "",          /* module documentation, may be NULL */
+    -1,          /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
+    ds1302Methods
+};
 
-	if (wiringPiSetup() == -1) exit (1) ;
+PyMODINIT_FUNC
+PyInit_ds1302(void) {
+	//PyObject *module = Py_InitModule("ds1302", ds1302Methods);
+        PyObject *module =  PyModule_Create(&cModPyDem);
+        printf("loadede\n");
+	if (wiringPiSetup() == -1) 
+{
+printf("wiringpi\n\n");
+exit (1) ;
+}
+else
+{
+printf("wiringpi33\n\n");
+}
+
+return module;
 }

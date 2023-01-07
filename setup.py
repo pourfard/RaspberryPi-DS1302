@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 
 ds1302 = Extension('ds1302',
 				   sources = ['python.c'],
-				   libraries = ['wiringPi', 'm'],
+				   libraries = ['python3.9', 'wiringPi', 'm', 'crypt', 'rt'],
 				   extra_compile_args = ['-std=c99'],
 			   )
 
